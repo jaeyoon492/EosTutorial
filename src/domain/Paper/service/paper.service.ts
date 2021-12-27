@@ -15,7 +15,7 @@ export class PaperService {
     const data = {
       from: "alice",
       to: "bob",
-      quantity: `${quantity}.0000 SYS`,
+      quantity: `${Number.parseFloat(String(quantity)).toFixed(4)} SYS`,
       memo: "some memo",
     };
     const result = await this.eosjsService.transaction({
