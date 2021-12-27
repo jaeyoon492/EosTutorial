@@ -18,11 +18,11 @@ export class EosjsService implements IEosJsService {
   constructor() {
     (this._textDecoder = new TextDecoder()),
       (this._textEncoder = new TextEncoder()),
-      (this._privateKeys = [
-        `${process.env.NEXT_PUBLIC_PRIVATE_KEY}`,
-      ]),
+      (this._privateKeys = [`${process.env.NEXT_PUBLIC_PRIVATE_KEY}`]),
       (this._signatureProvider = new JsSignatureProvider(this._privateKeys)),
-      (this._rpc = new JsonRpc(`${process.env.NEXT_PUBLIC_END_POINT}`, { fetch })),
+      (this._rpc = new JsonRpc(`${process.env.NEXT_PUBLIC_END_POINT}`, {
+        fetch,
+      })),
       (this._api = new Api({
         rpc: this._rpc,
         signatureProvider: this._signatureProvider,
@@ -32,7 +32,9 @@ export class EosjsService implements IEosJsService {
   }
 
   async transaction(
-    transferParams: TransferParams
+    transferParams: TransferParams,
+    blocksBehind: number = 3,
+    expireSeconds: number = 30
   ): Promise<TransactResult | ReadOnlyTransactResult | PushTransactionArgs> {
     const transaction = await this._api.transact(
       {
@@ -51,8 +53,8 @@ export class EosjsService implements IEosJsService {
         ],
       },
       {
-        blocksBehind: 3,
-        expireSeconds: 30,
+        blocksBehind,
+        expireSeconds,
       }
     );
 
